@@ -57,20 +57,32 @@ $produtos = $produto->Listar();
                 </tr>
             </thead>
             <tbody>
-            <?php foreach($produtos as $produto){ ?>
-    <tr>
-        <td><?php echo $produto['id']; ?></td>
-        <td><img src="../img/<?php echo $produto['foto']; ?>" alt="<?php echo $produto['foto']; ?>" width="100px"></td>
-        <td><?php echo $produto['nome']; ?></td>
-        <td><?php echo $produto['descricao']; ?></td>
-        <td><?php echo $produto['id_categoria']; ?></td>
-        <td><?php echo $produto['estoque']; ?></td>
-        <td><?php echo $produto['preco']; ?></td> 
-        <td>
-            <a href="editar.php?id=<?php echo $produto['id']; ?>" class="btn btn-primary btn-sm">Editar</a>
-            <a href="excluir.php?id=<?php echo $produto['id']; ?>" class="btn btn-danger btn-sm">Excluir</a>
-        </td>
-    </tr>
+            <?php foreach($produtos as $produto){ 
+                $nomeCategoria = '';
+                foreach($categorias as $categoria){
+                    if($categoria['id'] == $produto['id_categoria']){
+                        $nomeCategoria = $categoria['nome'];
+                        break;
+                    }
+                }
+                $fotoProduto = $produto['foto'];
+                if(empty($fotoProduto) || !file_exists('../img/'.$fotoProduto)){
+                    $fotoProduto = 'semfoto.jpg';
+                }
+            ?>
+            <tr>
+                <td><?php echo $produto['id']; ?></td>
+                <td><img src="../img/<?php echo $fotoProduto; ?>" alt="<?php echo $produto['nome']; ?>" width="100px"></td>
+                <td><?php echo $produto['nome']; ?></td>
+                <td><?php echo $produto['descricao']; ?></td>
+                <td><?php echo $nomeCategoria; ?></td>
+                <td><?php echo $produto['estoque']; ?></td>
+                <td>R$ <?php echo number_format($produto['preco'], 2, ',', '.'); ?></td>
+                <td>
+                    <a href="editar.php?id=<?php echo $produto['id']; ?>" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="#" class="btn btn-danger btn-sm" onclick="confirmarExclusao('excluir.php?id=<?php echo $produto['id']; ?>')">Excluir</a>
+                </td>
+            </tr>
 <?php } ?>             
             </tbody>
         </table>
@@ -169,12 +181,12 @@ $produtos = $produto->Listar();
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    <script>
- function confirmar(){
+   <script>
+      function confirmar(){
     alert('Você clicou em apagar.')
- }
-
-    </script>
+      }
+ 
+   </script>
 
 </body>
 
