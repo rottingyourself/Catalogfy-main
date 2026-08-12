@@ -47,15 +47,13 @@ class Produto{
     public function Atualizar(){
 
         $banco = Banco::conectar();
-        $sql = "UPDATE produtos SET nome = ?, de = ?, telefone = ? WHERE = ?,";
+        $sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, estoque = ?, foto = ?, id_categoria = ? WHERE id = ?";
         $banco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $comando = $banco->prepare($sql);
-        $comando->execute(array($this->nome, $this->estoque, $this->descricao, $this->preco, $this->foto, $this->id_categoria, $this->id_usuario));
+        $comando->execute(array($this->nome, $this->descricao, $this->preco, $this->estoque, $this->foto, $this->id_categoria, $this->id));
         Banco::desconectar();
-        // Retornar quantidade de linhas apagadas:
+        // Retornar quantidade de linhas alteradas:
         return $comando->rowCount();
-
-    
 
     }
     public function BuscarPorID(){
