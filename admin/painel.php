@@ -39,11 +39,11 @@ $produtos = $produto->Listar();
         <h1 class="text-center mb-4">Gerenciamento de Produtos</h1>
         <div class="row mb-3">
             <div class="col d-flex justify-content-end">
-                <button type="button" class="btn btn-success mx-1" data-toggle="modal" data-target="#modalCadastro"><i class="bi bi-plus-circle"></i> Cadastrar Produto</button>
-                <a class="btn btn-danger mx-1 text-white" href="sair.php"><i class="bi bi-box-arrow-right"></i> Sair</a>
+                <button type="button" class="btn btn-success mx-1" data-toggle="modal" data-target="#modalCadastro" data-testid="botao-cadastrar-produto"><i class="bi bi-plus-circle"></i> Cadastrar Produto</button>
+                <a class="btn btn-danger mx-1 text-white" href="sair.php" data-testid="botao-sair"><i class="bi bi-box-arrow-right"></i> Sair</a>
             </div>
         </div>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover" data-testid="tabela-produtos">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -79,8 +79,8 @@ $produtos = $produto->Listar();
                 <td><?php echo $produto['estoque']; ?></td>
                 <td>R$ <?php echo number_format($produto['preco'], 2, ',', '.'); ?></td>
                 <td>
-                    <a href="editar.php?id=<?php echo $produto['id']; ?>" class="btn btn-primary btn-sm">Editar</a>
-                    <a href="#" class="btn btn-danger btn-sm" onclick="confirmarExclusao('excluir.php?id=<?php echo $produto['id']; ?>')">Excluir</a>
+                    <a href="editar.php?id=<?php echo $produto['id']; ?>" class="btn btn-primary btn-sm" data-testid="link-editar-produto-<?php echo $produto['id']; ?>">Editar</a>
+                    <a href="#" class="btn btn-danger btn-sm" onclick="confirmarExclusao('excluir.php?id=<?php echo $produto['id']; ?>')" data-testid="link-excluir-produto-<?php echo $produto['id']; ?>">Excluir</a>
                 </td>
             </tr>
 <?php } ?>             
@@ -90,7 +90,7 @@ $produtos = $produto->Listar();
     </div>
 
     <!-- Modal de Cadastro -->
-    <div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog" aria-labelledby="modalCadastroLabel" aria-hidden="true">
+    <div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog" aria-labelledby="modalCadastroLabel" aria-hidden="true" data-testid="modal-cadastro-produto">
         <div class="modal-dialog" role="document">
         <form action="action/cadastrar_produto.php" method="POST" enctype="multipart/form-data">
             <div class="modal-content">
@@ -103,7 +103,7 @@ $produtos = $produto->Listar();
                 <div class="modal-body">
                         <div class="form-group">
                             <label for="nomeProduto">Nome</label>
-                            <input name="nome" type="text" class="form-control" id="nomeProduto" placeholder="Digite o nome do produto">
+                            <input name="nome" type="text" class="form-control" id="nomeProduto" placeholder="Digite o nome do produto" data-testid="input-nome-produto">
                         </div>
                         <div class="form-group">
                             <label for="fotoProduto">Foto</label>
@@ -129,7 +129,7 @@ $produtos = $produto->Listar();
                         </div>
                         <div class="form-group">
                             <label for="estoqueProduto">Estoque</label>
-                            <input name="estoque" type="number" class="form-control" id="estoqueProduto" placeholder="Digite a quantidade em estoque">
+                            <input name="estoque" type="number" class="form-control" id="estoqueProduto" placeholder="Digite a quantidade em estoque" data-testid="input-estoque-produto">
                         </div>
                         <div class="form-group">
                             <label for="precoProduto">Preço</label>
@@ -137,13 +137,13 @@ $produtos = $produto->Listar();
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">R$</span>
                                 </div>
-                                <input name="preco" type="number" class="form-control" id="precoProduto" placeholder="Digite o preço">
+                                <input name="preco" type="number" class="form-control" id="precoProduto" placeholder="Digite o preço" data-testid="input-preco-produto">
                             </div>
                         </div>
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="submit" class="btn btn-primary" data-testid="botao-salvar-produto">Salvar</button>
                 </div>
              </div>
         </form>

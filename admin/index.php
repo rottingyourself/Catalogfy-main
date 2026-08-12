@@ -47,15 +47,15 @@
                 <form id="formLogin" action="action/logar.php" method="post">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" data-testid="login-email">
                         <div id="emailHelp" class="form-text">Seu e-mail cadastrado no sistema.</div>
                     </div>
                     <div class="mb-3">
                         <label for="senha" class="form-label">Senha</label>
-                        <input type="password" class="form-control" id="senha" name="senha">
+                        <input type="password" class="form-control" id="senha" name="senha" data-testid="login-senha">
                     </div>
                     <div class="form-group">
-                        <button type="submit" id="btnEntrar" class="form-control btn btn-primary rounded submit px-3">Entrar</button>
+                        <button type="submit" id="btnEntrar" class="form-control btn btn-primary rounded submit px-3" data-testid="login-submit">Entrar</button>
                     </div>
                     <div class="mb-3 mt-3">
                         <p class="text-center">Não possui conta no sistema? <a href="#" id="btnCadastroToggle">Cadastre-se</a></p>

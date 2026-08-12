@@ -44,14 +44,15 @@ $listaProdutos = $produto->Listar();
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
     <?php foreach ($listaProdutos as $prod): ?>
     <div class="col">
-      <div class="card h-100">
+      <div class="card h-100" data-testid="produto-card-<?php echo $prod['id']; ?>">
         <a href="produto.php?id=<?php echo $prod['id']; ?>">
           <img class="card-img-top" src="img/<?php echo $prod['foto']; ?>" alt="<?php echo $prod['nome']; ?>">
         </a>
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title"><?php echo $prod['nome']; ?></h5>
+          <h5 class="card-title" data-testid="produto-nome-<?php echo $prod['id']; ?>"><?php echo $prod['nome']; ?></h5>
           <p class="card-text text-truncate"><?php echo $prod['descricao']; ?></p>
-          <a href="produto.php?id=<?php echo $prod['id']; ?>" class="btn btn-primary mt-auto">Mais detalhes...</a>
+          <p class="card-text" data-testid="produto-preco-<?php echo $prod['id']; ?>">R$ <?php echo number_format($prod['preco'], 2, ',', '.'); ?></p>
+          <a href="produto.php?id=<?php echo $prod['id']; ?>" class="btn btn-primary mt-auto" data-testid="produto-detalhes-<?php echo $prod['id']; ?>">Mais detalhes...</a>
         </div>
       </div>
     </div>
