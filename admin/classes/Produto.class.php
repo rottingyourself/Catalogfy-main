@@ -56,6 +56,34 @@ class Produto{
         return $comando->rowCount();
 
     }
+    public function Buscar($busca = '', $id_categoria = ''){
+        $banco = Banco::conectar();
+        $sql = "SELECT * FROM produtos";
+        $params = array();
+
+        if (!empty($busca) || !empty($id_categoria)) {
+            $sql .= " WHERE ";
+            $condicoes = array();
+            if (!empty($busca)) {
+                $condicoes[] = "(nome LIKE ? OR descricao LIKE ?)";
+                $params[] = '%' . $busca . '%';
+                $params[] = '%' . $busca . '%';
+            }
+            if (!empty($id_categoria)) {
+                $condicoes[] = "id_categoria = ?";
+                $params[] = $id_categoria;
+            }
+            $sql .= implode(' AND ', $condicoes);
+        }
+
+        $sql .= " ORDER BY id DESC";
+        $comando = $banco->prepare($sql);
+        $comando->execute($params);
+        $resultado = $comando->fetchAll(PDO::FETCH_ASSOC);
+        Banco::desconectar();
+        return $resultado;
+    }
+
     public function BuscarPorID(){
         $banco = Banco::conectar();
         $sql = "SELECT * FROM produtos WHERE id = ?";
