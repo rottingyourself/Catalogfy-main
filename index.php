@@ -1,10 +1,21 @@
 <?php
 // Página inicial do site para listagem de produtos cadastrados.
 require_once('admin/classes/Produto.class.php');
+require_once('admin/classes/Categoria.class.php');
 require_once('admin/classes/Banco.class.php');
 
 $produto = new Produto();
-$listaProdutos = $produto->Listar();
+$categoria = new Categoria();
+$categorias = $categoria->Listar();
+
+$busca = isset($_GET['busca']) ? $_GET['busca'] : '';
+$id_categoria = isset($_GET['categoria']) ? $_GET['categoria'] : '';
+
+if (!empty($busca) || !empty($id_categoria)) {
+    $listaProdutos = $produto->Buscar($busca, $id_categoria);
+} else {
+    $listaProdutos = $produto->Listar();
+}
 ?>
 <!doctype html>
 <html lang="pt_br">
@@ -39,26 +50,58 @@ $listaProdutos = $produto->Listar();
 </nav>
 
 <main class="container my-4">
-  <h1 class="display-5 mb-4">Listagem de Produtos</h1>
+  <h1 class="display-5 mb-4">
+    <?php if (!empty($busca)): ?>
+      Resultados para: <span class="text-primary"><?php echo htmlspecialchars($busca); ?></span>
+    <?php else: ?>
+      Listagem de Produtos
+    <?php endif; ?>
+  </h1>
+
+  <!-- Formulário de busca -->
+  <form method="GET" class="row g-3 mb-4" data-testid="form-busca">
+    <div class="col-md-5">
+      <input type="text" name="busca" class="form-control" placeholder="Buscar produto..."
+        value="<?php echo htmlspecialchars($busca); ?>" data-testid="input-busca">
+    </div>
+    <div class="col-md-4">
+      <select name="categoria" class="form-select" data-testid="select-categoria">
+        <option value="">Todas as categorias</option>
+        <?php foreach ($categorias as $cat): ?>
+          <option value="<?php echo $cat['id']; ?>" <?php if ($id_categoria == $cat['id']) echo 'selected'; ?>>
+            <?php echo htmlspecialchars($cat['nome']); ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary w-100" data-testid="botao-buscar">Buscar</button>
+    </div>
+  </form>
+
   <!-- Grid responsivo: 1 col (xs) → 2 col (sm) → 3 col (md) → 4 col (lg) -->
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-    <?php foreach ($listaProdutos as $prod): ?>
-    <div class="col">
-      <div class="card h-100" data-testid="produto-card-<?php echo $prod['id']; ?>">
-        <a href="produto.php?id=<?php echo $prod['id']; ?>">
-          <img class="card-img-top" src="img/<?php echo $prod['foto']; ?>" alt="<?php echo $prod['nome']; ?>">
-        </a>
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title" data-testid="produto-nome-<?php echo $prod['id']; ?>"><?php echo $prod['nome']; ?></h5>
-          <p class="card-text text-truncate"><?php echo $prod['descricao']; ?></p>
-          <p class="card-text" data-testid="produto-preco-<?php echo $prod['id']; ?>">R$ <?php echo number_format($prod['preco'], 2, ',', '.'); ?></p>
-          <a href="produto.php?id=<?php echo $prod['id']; ?>" class="btn btn-primary mt-auto" data-testid="produto-detalhes-<?php echo $prod['id']; ?>">Mais detalhes...</a>
+  <?php if (empty($listaProdutos)): ?>
+    <p class="text-center text-muted" data-testid="mensagem-vazio">Nenhum produto encontrado</p>
+  <?php else: ?>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      <?php foreach ($listaProdutos as $prod): ?>
+      <div class="col">
+        <div class="card h-100" data-testid="produto-card-<?php echo $prod['id']; ?>">
+          <a href="produto.php?id=<?php echo $prod['id']; ?>">
+            <img class="card-img-top" src="img/<?php echo $prod['foto']; ?>" alt="<?php echo $prod['nome']; ?>">
+          </a>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title" data-testid="produto-nome-<?php echo $prod['id']; ?>"><?php echo $prod['nome']; ?></h5>
+            <p class="card-text text-truncate"><?php echo $prod['descricao']; ?></p>
+            <p class="card-text" data-testid="produto-preco-<?php echo $prod['id']; ?>">R$ <?php echo number_format($prod['preco'], 2, ',', '.'); ?></p>
+            <a href="produto.php?id=<?php echo $prod['id']; ?>" class="btn btn-primary mt-auto" data-testid="produto-detalhes-<?php echo $prod['id']; ?>">Mais detalhes...</a>
+          </div>
         </div>
       </div>
+      <?php endforeach; ?>
     </div>
-    <?php endforeach; ?>
-  </div>
-</main>
+  <?php endif; ?>
+</main> 
         
 
 <div class="container">
